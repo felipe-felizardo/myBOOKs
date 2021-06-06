@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="myBOOKs.Views.QueroLerPage"
+             xmlns:local="clr-namespace:myBOOKs.ViewModels"  
+             xmlns:model="clr-namespace:myBOOKs.Models"  
+             Title="Quero ler">
+    <ContentPage.Content>
+        <RefreshView x:DataType="local:QueroLerViewModel" Command="{Binding LoadLivrosCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView x:Name="LivrosListView"
+                ItemsSource="{Binding Livros}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10" x:DataType="model:Livro">
+
+                            <Frame BackgroundColor="{StaticResource Primary}">
+                                <StackLayout>
+                                    <Label Text="{Binding Titulo}"
+                                       TextColor="White"
+                                       LineBreakMode="NoWrap" 
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                    <Label Text="{Binding Autor}"
+                                       TextColor="White"
+                                       LineBreakMode="NoWrap" 
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="14"
+                                       FontAttributes="Italic"
+                                       Margin="0,0,0,15"/>
+                                    <Button Text="Iniciar"
+                                            BorderWidth="2"
+                                            BorderColor="White"/>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

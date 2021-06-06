@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="myBOOKs.Views.LidosPage"
+             xmlns:local="clr-namespace:myBOOKs.ViewModels"  
+             xmlns:model="clr-namespace:myBOOKs.Models"
+             Title="Livros lidos">
+    <ContentPage.Content>
+        <RefreshView x:DataType="local:LidoViewModel" Command="{Binding LoadLivrosCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <CollectionView x:Name="LivrosListView"
+                ItemsSource="{Binding Livros}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10" x:DataType="model:Livro">
+
+                            <Frame BackgroundColor="{StaticResource Primary}">
+                                <StackLayout>
+                                    <Label Text="{Binding Titulo}"
+                                       TextColor="White"
+                                       LineBreakMode="NoWrap" 
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+                                    <Label Text="{Binding Autor}"
+                                       TextColor="White"
+                                       LineBreakMode="NoWrap" 
+                                       Style="{DynamicResource ListItemTextStyle}" 
+                                       FontSize="14"
+                                       FontAttributes="Italic"
+                                       Margin="0,0,0,15"/>
+                                    <Grid ColumnDefinitions="*, *"
+                                          RowDefinitions="*, *"
+                                          HorizontalOptions="CenterAndExpand">
+                                        <Label Text="Início"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               HorizontalTextAlignment="Start"
+                                               HorizontalOptions="StartAndExpand"
+                                               Grid.Row="0"
+                                               Grid.Column="0"/>
+                                        <Label Text="20/01/2020"
+                                               TextColor="White"
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               Grid.Row="1"
+                                               Grid.Column="0"/>
+                                        <Label Text="Fim"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               HorizontalTextAlignment="End"
+                                               HorizontalOptions="EndAndExpand"
+                                               Grid.Row="0"
+                                               Grid.Column="1"/>
+                                        <Label Text="20/01/2020"
+                                               TextColor="White"
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               HorizontalTextAlignment="End"
+                                               HorizontalOptions="EndAndExpand"
+                                               Grid.Row="1"
+                                               Grid.Column="1"/>                                        
+                                    </Grid>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

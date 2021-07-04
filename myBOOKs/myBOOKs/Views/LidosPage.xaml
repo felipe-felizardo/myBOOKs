@@ -5,72 +5,96 @@
              xmlns:local="clr-namespace:myBOOKs.ViewModels"  
              xmlns:model="clr-namespace:myBOOKs.Models"
              Title="Livros lidos">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="MarcaPaginaTextStyle">
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <RefreshView x:DataType="local:LidoViewModel" Command="{Binding LoadLivrosCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-            <CollectionView x:Name="LivrosListView"
-                ItemsSource="{Binding Livros}"
-                SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10" x:DataType="model:Livro">
-
-                            <Frame BackgroundColor="{StaticResource Primary}">
-                                <StackLayout>
-                                    <Label Text="{Binding Titulo}"
-                                       TextColor="White"
-                                       LineBreakMode="NoWrap" 
-                                       Style="{DynamicResource ListItemTextStyle}" 
-                                       FontSize="16"
-                                       FontAttributes="Bold"/>
-                                    <Label Text="{Binding Autor}"
-                                       TextColor="White"
-                                       LineBreakMode="NoWrap" 
-                                       Style="{DynamicResource ListItemTextStyle}" 
-                                       FontSize="14"
-                                       FontAttributes="Italic"
-                                       Margin="0,0,0,15"/>
-                                    <Grid ColumnDefinitions="*, *"
-                                          RowDefinitions="*, *"
-                                          HorizontalOptions="CenterAndExpand">
-                                        <Label Text="Início"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
+            <Grid>
+                <CollectionView x:Name="LivrosListView"
+                    ItemsSource="{Binding Livros}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:Livro">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:LidoViewModel}}, Path=ItemTapped}"
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>                                
+                                <Frame BackgroundColor="{StaticResource Primary}">
+                                    <StackLayout>
+                                        <Label Text="{Binding Titulo}"
+                                               LineBreakMode="NoWrap" 
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Autor}"
+                                               LineBreakMode="NoWrap" 
                                                Style="{DynamicResource ListItemTextStyle}" 
                                                FontSize="14"
-                                               HorizontalTextAlignment="Start"
-                                               HorizontalOptions="StartAndExpand"
-                                               Grid.Row="0"
-                                               Grid.Column="0"/>
-                                        <Label Text="20/01/2020"
-                                               TextColor="White"
-                                               Style="{DynamicResource ListItemTextStyle}" 
-                                               FontSize="14"
-                                               Grid.Row="1"
-                                               Grid.Column="0"/>
-                                        <Label Text="Fim"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
-                                               Style="{DynamicResource ListItemTextStyle}" 
-                                               FontSize="14"
-                                               HorizontalTextAlignment="End"
-                                               HorizontalOptions="EndAndExpand"
-                                               Grid.Row="0"
-                                               Grid.Column="1"/>
-                                        <Label Text="20/01/2020"
-                                               TextColor="White"
-                                               Style="{DynamicResource ListItemTextStyle}" 
-                                               FontSize="14"
-                                               HorizontalTextAlignment="End"
-                                               HorizontalOptions="EndAndExpand"
-                                               Grid.Row="1"
-                                               Grid.Column="1"/>                                        
-                                    </Grid>
-                                </StackLayout>
-                            </Frame>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                               FontAttributes="Italic"
+                                               Margin="0,0,0,15"/>
+                                        <Grid ColumnDefinitions="*, *"
+                                              RowDefinitions="*, *"
+                                              HorizontalOptions="CenterAndExpand">
+                                            <Label Text="Início"
+                                                   FontAttributes="Bold"
+                                                   Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="14"
+                                                   HorizontalTextAlignment="Start"
+                                                   HorizontalOptions="StartAndExpand"
+                                                   Grid.Row="0"
+                                                   Grid.Column="0"/>
+                                            <Label Text="{Binding DataInicioStr}"
+                                                   Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="14"
+                                                   Grid.Row="1"
+                                                   Grid.Column="0"/>
+                                            <Label Text="Fim"
+                                                   FontAttributes="Bold"
+                                                   Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="14"
+                                                   HorizontalTextAlignment="End"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   Grid.Row="0"
+                                                   Grid.Column="1"/>
+                                            <Label Text="{Binding DataFimStr}"
+                                                   Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="14"
+                                                   HorizontalTextAlignment="End"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   Grid.Row="1"
+                                                   Grid.Column="1"/>                                        
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <ImageButton x:Name="fab_plus"
+                             Source="fab_plus"
+                             BackgroundColor="Transparent"
+                             WidthRequest="70"
+                             HeightRequest="70"
+                             Margin="10"
+                             HorizontalOptions="End"
+                             VerticalOptions="End"
+                             Command="{Binding AddLivroCommand}"/>
+            </Grid>
         </RefreshView>
     </ContentPage.Content>
 </ContentPage>

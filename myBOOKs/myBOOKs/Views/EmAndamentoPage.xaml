@@ -1,12 +1,130 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="myBOOKs.Views.EmAndamentoPage">
+             x:Class="myBOOKs.Views.EmAndamentoPage"
+             xmlns:local="clr-namespace:myBOOKs.ViewModels"  
+             xmlns:model="clr-namespace:myBOOKs.Models"
+             Title="Em andamento">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="MarcaPaginaTextStyle">
+                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <RefreshView x:DataType="local:EmAndamentoViewModel" Command="{Binding LoadLivrosCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <Grid>
+                <CollectionView x:Name="LivrosListView"
+                    ItemsSource="{Binding Livros}"
+                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:Livro">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:EmAndamentoViewModel}}, Path=ItemTapped}"
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                                <Frame BackgroundColor="{StaticResource Primary}">
+                                    <StackLayout>
+                                        <Label Text="{Binding Titulo}"
+                                               LineBreakMode="NoWrap" 
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Autor}"
+                                               LineBreakMode="NoWrap" 
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               FontAttributes="Italic"
+                                               Margin="0,0,0,15"/>
+                                        <Grid ColumnDefinitions="*, *"
+                                              HorizontalOptions="FillAndExpand">
+                                            <StackLayout Grid.Column="0"
+                                                         VerticalOptions="Center">
+                                                <Label Text="Início"
+                                                       FontAttributes="Bold"
+                                                       Style="{DynamicResource ListItemTextStyle}" 
+                                                       FontSize="14"
+                                                       HorizontalTextAlignment="Start"
+                                                       HorizontalOptions="StartAndExpand"
+                                                       Grid.Row="0"
+                                                       Grid.Column="0"/>
+                                                <Label Text="{Binding DataInicioStr}"
+                                                       Style="{DynamicResource ListItemTextStyle}" 
+                                                       FontSize="14"
+                                                       Grid.Row="1"
+                                                       Grid.Column="0"/>
+                                            </StackLayout>
+
+                                            <Frame Grid.Column="1"
+                                                   BackgroundColor="White"
+                                                   CornerRadius="5"
+                                                   Padding="5">
+                                                <StackLayout>
+                                                    <Label Text="Marca página"
+                                                           HorizontalTextAlignment="Center"
+                                                           Style="{DynamicResource MarcaPaginaTextStyle}" 
+                                                           FontAttributes="Bold"/>
+                                                    <Label Text="328 / 364"
+                                                           HorizontalTextAlignment="Center"
+                                                           Style="{DynamicResource MarcaPaginaTextStyle}">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="{Binding MarcaPagina}"/>
+                                                                <Span Text=" / "/>
+                                                                <Span Text="{Binding Paginas}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                            </Frame>
+                                        </Grid>
+
+                                        <Grid ColumnDefinitions="*, auto">
+                                            <Button Text="Finalizar leitura"
+                                                    BorderWidth="2"
+                                                    BorderColor="White"
+                                                    Margin="0,10,0,0"
+                                                    Grid.Column="0"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:EmAndamentoViewModel}}, Path=FinalizaLeituraCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            <ImageButton Source="btn_delete"
+                                                         BackgroundColor="Transparent"
+                                                         WidthRequest="50"
+                                                         HeightRequest="50"
+                                                         HorizontalOptions="End"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type local:EmAndamentoViewModel}}, Path=DeletaCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         VerticalOptions="End"
+                                                         Grid.Column="1"/>
+                                        </Grid>
+
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <ImageButton x:Name="fab_plus"
+                             Source="fab_plus"
+                             BackgroundColor="Transparent"
+                             WidthRequest="70"
+                             HeightRequest="70"
+                             Margin="10"
+                             HorizontalOptions="End"
+                             VerticalOptions="End"
+                             Command="{Binding AddLivroCommand}"/>
+            </Grid>
+        </RefreshView>
     </ContentPage.Content>
 </ContentPage>

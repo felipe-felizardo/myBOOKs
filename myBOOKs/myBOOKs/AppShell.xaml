@@ -34,5 +34,4 @@
         <ShellContent Title="Em andamento" Icon="icon_about.png" Route="EmAndamentoPage" ContentTemplate="{DataTemplate local:EmAndamentoPage}" />
         <ShellContent Title="Quero ler" Icon="icon_about.png" Route="QueroLerPage" ContentTemplate="{DataTemplate local:QueroLerPage}" />
     </TabBar>
-
 </Shell>

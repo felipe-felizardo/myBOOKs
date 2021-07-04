@@ -11,6 +11,9 @@ namespace myBOOKs
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(CadastroEmAndamentoPage), typeof(CadastroEmAndamentoPage));
+            Routing.RegisterRoute(nameof(CadastroQueroLerPage), typeof(CadastroQueroLerPage));
+            Routing.RegisterRoute(nameof(CadastroLidoPage), typeof(CadastroLidoPage));
         }
 
     }

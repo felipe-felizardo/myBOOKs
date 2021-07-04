@@ -7,37 +7,70 @@
              Title="Quero ler">
     <ContentPage.Content>
         <RefreshView x:DataType="local:QueroLerViewModel" Command="{Binding LoadLivrosCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-            <CollectionView x:Name="LivrosListView"
-                ItemsSource="{Binding Livros}"
-                SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10" x:DataType="model:Livro">
+            <Grid>
+                <CollectionView x:Name="LivrosListView"
+                        ItemsSource="{Binding Livros}"
+                        SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:Livro">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:QueroLerViewModel}}, Path=ItemTapped}"
+                                        CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                                <Frame BackgroundColor="{StaticResource Primary}">
+                                    <StackLayout>
+                                        <Label Text="{Binding Titulo}"
+                                               TextColor="White"
+                                               LineBreakMode="NoWrap" 
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Autor}"
+                                               TextColor="White"
+                                               LineBreakMode="NoWrap" 
+                                               Style="{DynamicResource ListItemTextStyle}" 
+                                               FontSize="14"
+                                               FontAttributes="Italic"
+                                               Margin="0,0,0,15"/>
 
-                            <Frame BackgroundColor="{StaticResource Primary}">
-                                <StackLayout>
-                                    <Label Text="{Binding Titulo}"
-                                       TextColor="White"
-                                       LineBreakMode="NoWrap" 
-                                       Style="{DynamicResource ListItemTextStyle}" 
-                                       FontSize="16"
-                                       FontAttributes="Bold"/>
-                                    <Label Text="{Binding Autor}"
-                                       TextColor="White"
-                                       LineBreakMode="NoWrap" 
-                                       Style="{DynamicResource ListItemTextStyle}" 
-                                       FontSize="14"
-                                       FontAttributes="Italic"
-                                       Margin="0,0,0,15"/>
-                                    <Button Text="Iniciar"
-                                            BorderWidth="2"
-                                            BorderColor="White"/>
-                                </StackLayout>
-                            </Frame>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                        <Grid ColumnDefinitions="*, auto">
+                                            <Button Text="Iniciar leitura"
+                                                    BorderWidth="2"
+                                                    BorderColor="White"
+                                                    Margin="0,10,0,0"
+                                                    Grid.Column="0"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:QueroLerViewModel}}, Path=IniciarLeituraCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            <ImageButton Source="btn_delete"
+                                                         BackgroundColor="Transparent"
+                                                         WidthRequest="50"
+                                                         HeightRequest="50"
+                                                         HorizontalOptions="End"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type local:QueroLerViewModel}}, Path=DeletaCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         VerticalOptions="End"
+                                                         Grid.Column="1"/>
+                                        </Grid>                                        
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <ImageButton x:Name="fab_plus"
+                             Source="fab_plus"
+                             BackgroundColor="Transparent"
+                             WidthRequest="70"
+                             HeightRequest="70"
+                             Margin="10"
+                             HorizontalOptions="End"
+                             VerticalOptions="End"
+                             Command="{Binding AddLivroCommand}"/>
+            </Grid>
         </RefreshView>
     </ContentPage.Content>
 </ContentPage>

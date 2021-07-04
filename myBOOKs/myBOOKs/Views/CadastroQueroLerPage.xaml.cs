@@ -11,20 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace myBOOKs.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EmAndamentoPage : ContentPage
+    public partial class CadastroQueroLerPage : ContentPage
     {
-        EmAndamentoViewModel _viewModel;
+        CadastroQueroLerViewModel _viewModel;
 
-        public EmAndamentoPage()
+        public CadastroQueroLerPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new EmAndamentoViewModel();
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            _viewModel.OnAppearing();
+            BindingContext = _viewModel = new CadastroQueroLerViewModel();
         }
     }
 }

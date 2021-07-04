@@ -19,14 +19,20 @@ namespace myBOOKs.ViewModels
         public Command AddLivroCommand { get; }
         public Command<Livro> ItemTapped { get; }
 
+        public Command DeletaCommand { get; }
+        public Command IniciarLeituraCommand { get; }
+
         public QueroLerViewModel()
         {
             Livros = new ObservableCollection<Livro>();
 
             LoadLivrosCommand = new Command(async () => await ExecuteLoadLivrosCommand());
             ItemTapped = new Command<Livro>(OnItemSelected);
-            AddLivroCommand = new Command(OnAddItem);
+            AddLivroCommand = new Command<Livro>(OnAddItem);
+            DeletaCommand = new Command<Livro>(OnDelete);
+            IniciarLeituraCommand = new Command<Livro>(IniciarLeitura);
         }
+
         //Popula a coleção de livros
         async Task ExecuteLoadLivrosCommand()
         {
@@ -35,11 +41,8 @@ namespace myBOOKs.ViewModels
             try
             {
                 Livros.Clear();
-                var livros = await LivroStore.GetItemsAsync(true);
-                foreach (var livro in livros)
-                {
+                foreach (var livro in await LivroStore.GetItemsAsync(TipoLivro.QuerLer))
                     Livros.Add(livro);
-                }
             }
             catch (Exception ex)
             {
@@ -69,10 +72,26 @@ namespace myBOOKs.ViewModels
             }
         }
 
-        //Função executada ao apertar o botão de adicionar registro
-        private async void OnAddItem(object obj)
+        //Função que deleta um livro
+        private async void OnDelete(Livro livro)
         {
-            //await Shell.Current.GoToAsync(nameof(NewItemPage));
+            try
+            {
+                if (livro.Id != 0)
+                    await LivroStore.DeleteItemAsync(livro.Id);
+
+                await ExecuteLoadLivrosCommand();
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Falha ao excluir o livro");
+            }
+        }
+
+        //Função executada ao apertar o botão de adicionar registro
+        private async void OnAddItem(Livro livro)
+        {
+            await Shell.Current.GoToAsync(nameof(CadastroQueroLerPage));
         }
 
         //Função executada ao selecionar um livro
@@ -81,8 +100,18 @@ namespace myBOOKs.ViewModels
             if (livro == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            //await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={livro.Id}");
+            await Shell.Current.GoToAsync($"{nameof(CadastroQueroLerPage)}?{nameof(Livro.Id)}={livro.Id}");
+        }
+
+        async void IniciarLeitura(Livro livro)
+        {
+            if (livro == null)
+                return;
+
+            livro.TipoLivro = TipoLivro.Andamento;
+            livro.DataInicio = DateTime.Now;
+            await LivroStore.UpdateItemAsync(livro);
+            await ExecuteLoadLivrosCommand();
         }
     }
 }

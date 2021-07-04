@@ -14,8 +14,38 @@ namespace myBOOKs.Services
         {
             livros = new List<Livro>()
             {
-                new Livro { Id = Guid.NewGuid().ToString(), Titulo = "A Revolução Dos Bichos", Autor = "George Orwell", Observacao = "Observação." },
-                new Livro { Id = Guid.NewGuid().ToString(), Titulo = "Como As Democracias Morrem", Autor = "Steven Levitsky, Daniel Ziblatt", Observacao = "Observação." },
+                new Livro 
+                { 
+                    Id = 1,
+                    TipoLivro = TipoLivro.QuerLer,
+                    Titulo = "A Revolução Dos Bichos", 
+                    Autor = "George Orwell",
+                    Paginas = 300,
+                    Observacoes = "Observação." 
+                },
+                new Livro 
+                { 
+                    Id = 2,
+                    TipoLivro = TipoLivro.Andamento,
+                    Paginas = 350,
+                    MarcaPagina = 200,
+                    DataInicio = new DateTime(2021, 01, 29),
+                    Titulo = "Como As Democracias Morrem", 
+                    Autor = "Steven Levitsky, Daniel Ziblatt",
+                    Observacoes = "Observação." 
+                },
+                new Livro
+                {
+                    Id = 3,
+                    TipoLivro = TipoLivro.Lido,
+                    Paginas = 400,
+                    MarcaPagina = 400,
+                    DataInicio = new DateTime(2021, 01, 29),
+                    DataFim = new DateTime(2021, 02, 15),
+                    Titulo = "Neuromance",
+                    Autor = "William Gibson",
+                    Observacoes = "Observação."
+                },
             };
         }
 
@@ -34,7 +64,7 @@ namespace myBOOKs.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
             var oldLivro = livros.Where((Livro arg) => arg.Id == id).FirstOrDefault();
             livros.Remove(oldLivro);
@@ -42,14 +72,19 @@ namespace myBOOKs.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<Livro> GetItemAsync(string id)
+        public async Task<Livro> GetItemAsync(int id)
         {
             return await Task.FromResult(livros.FirstOrDefault(s => s.Id == id));
         }
 
-        public async Task<IEnumerable<Livro>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Livro>> GetItemsAsync(TipoLivro tipoLivro)
         {
-            return await Task.FromResult(livros);
+            return await Task.FromResult(livros.Where((livro) => livro.TipoLivro == tipoLivro));
+        }
+
+        public async Task<int> GetNewId()
+        {
+            return await Task.FromResult(livros.OrderByDescending((x) => x.Id).FirstOrDefault().Id + 1);
         }
     }
 }
